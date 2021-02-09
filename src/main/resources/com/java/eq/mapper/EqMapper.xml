@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.eq.mapper.EqMapper">
+    <!-- equipment table -->
+    <!-- 順番通りに入れるならVALUEの明示は不要 -->
+    <insert id="insertEquipment">
+        INSERT INTO
+            equipment
+        VALUES
+            (#{eqId},
+            #{somuId},
+            #{eqName},
+            #{manufacturer},
+            #{modelNumber},
+            #{place},
+            #{lendPeriod})
+    </insert>
+    <update id="updateEquipment">
+        UPDATE
+            equipment
+        SET
+            eq_id=#{eq.eqId},
+            eq_name=#{eq.eqName},
+            manufacturer=#{eq.manufacturer},
+            model_number=#{eq.modelNumber},
+            place=#{eq.place},
+            lend_period=#{eq.lendPeriod}
+        WHERE
+            eq_id=#{id}
+    </update>
+    <select id="selectEquipment" resultType="com.java.eq.dto.Equipment">
+        SELECT
+            *
+        FROM
+            equipment
+        WHERE
+            eq_id=#{eqId}
+    </select>
+    <delete id="deleteEquipment">
+        DELETE FROM
+            equipment
+        WHERE
+            eq_id=#{eqId}
+    </delete>
+
+    <!-- eq_history table -->
+    <!-- incrementの場合、必ずVALUEの明示が必要 -->
+    <insert id="insertEqHistory">
+        INSERT INTO
+            eq_history (eq_id, rec_upd_date, status, comment)
+        VALUES
+            (#{eqId},
+            #{recUpdDate},
+            #{status},
+            #{comment})
+    </insert>
+    <select id="selectEqHistory" resultType="com.java.eq.dto.EqHistory">
+        SELECT
+            *
+        FROM
+            eq_history
+        WHERE
+            history_id=#{historyId}
+    </select>
+    <select id="selectAllEqHistory" resultType="com.java.eq.dto.EqHistory">
+        SELECT
+            *
+        FROM
+            eq_history
+    </select>
+
+    <!-- reserve_lend table -->
+    <insert id="insertReserveLend">
+        INSERT INTO
+            reserve_lend
+        VALUES
+            (#{resId},
+            #{eqId},
+            #{employeeId},
+            #{resDate},
+            #{planLendDate},
+            #{planReturnDate},
+            #{lentDate},
+            #{lentContactPerson},
+            #{returnedDate},
+            #{returnedContactPerson})
+    </insert>
+    <update id="updateReserveLend">
+        UPDATE
+            reserve_lend
+        SET
+            res_id=#{res.resId},
+            eq_id=#{res.eqId},
+            employee_id=#{res.employeeId},
+            res_date=#{res.resDate},
+            plan_lend_date=#{res.planLendDate},
+            plan_return_date=#{res.planReturnDate},
+            lent_date=#{res.lentDate},
+            lent_contact_person=#{res.lentContactPerson},
+            returned_date=#{res.returnedDate},
+            returned_contact_person=#{res.returnedContactPerson}
+        WHERE
+            res_id=#{id}
+    </update>
+    <select id="selectReserveLend" resultType="com.java.eq.dto.ReserveLend">
+        SELECT
+            *
+        FROM
+            reserve_lend
+        WHERE
+            res_id=#{resId}
+    </select>
+    <delete id="deleteReserveLend">
+        DELETE FROM
+            reserve_lend
+        WHERE
+            res_id=#{resId}
+    </delete>
+
+    <!-- user table -->
+    <insert id="insertEmployee">
+        INSERT INTO
+            employee
+        VALUES
+            (#{employeeId},
+            #{employeeName},
+            #{address})
+    </insert>
+    <select id="selectEmployee" resultType="com.java.eq.dto.Employee">
+        SELECT
+            *
+        FROM
+            employee
+        WHERE
+            employee_id=#{employeeId}
+    </select>
+    <delete id="deleteEmployee">
+        DELETE FROM
+            employee
+        WHERE
+            employee_id=#{employeeId}
+    </delete>
+</mapper>

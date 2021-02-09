@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE logback>
+<configuration>
+    <property name="LOG" value="./log/" />
+
+    <!-- CONSOLE用定義 -->
+    <appender name="CONSOLE"
+        class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %white(%d{ISO8601}) %highlight(%-5level) [%green(%t)] %yellow(%C{1.}): %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <!-- INFO レベル以上をファイルに出力する -->
+    <appender name="FILE_INFO"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- <file>${LOG}/G3sslcertApplication-logger.log</file> -->
+        <encoder
+            class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %-5level %C{1.} [%t] %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOG}/Eq-ManagementApplication.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <!--
+            %iで末尾0から割り当て
+            <fileNamePattern>${LOG}/G3sslcertApplication.log.%d{yyyy-MM-dd}.%i
+            </fileNamePattern>
+
+                        <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+             -->
+        </rollingPolicy>
+    </appender>
+
+    <!-- ERRORレベル出力用定義 -->
+    <appender name="FILE_ERROR"
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- ERRORレベルのみ出力するようフィルタを定義する -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- <file>${LOG}/error.G3sslcertApplication-logger.log</file> -->
+        <encoder
+            class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %-5level %C{1.} [%t] %msg%n</Pattern>
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily and when the file reaches 10 MegaBytes -->
+            <fileNamePattern>${LOG}/error.Eq-ManagementApplication.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <!--
+                        <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+             -->
+        </rollingPolicy>
+    </appender>
+
+    <!-- LOG everything at DEBUG level -->
+    <root level="info">
+        <appender-ref ref="FILE_INFO" />
+        <appender-ref ref="FILE_ERROR" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>
